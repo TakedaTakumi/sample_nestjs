@@ -1,5 +1,7 @@
+import { v4 } from 'uuid';
+
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Todo } from './models/todo.models';
+import { Todo, TodoStatus } from './models/todo.models';
 
 @Injectable()
 export class TodoService {
@@ -15,5 +17,19 @@ export class TodoService {
       throw new NotFoundException();
     }
     return result;
+  }
+
+  insert(title: string, description: string): Todo {
+    const todo = new Todo();
+    todo.id = v4();
+    todo.title = title;
+    todo.description = description;
+    todo.status = TodoStatus.NEW;
+    todo.createdAt = new Date();
+    todo.updateAt = new Date();
+
+    this.todos.push(todo);
+
+    return todo;
   }
 }
